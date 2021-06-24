@@ -12,11 +12,20 @@ export default class App extends Component {
 
   state = {
     todoData: [
-      { label: "Drink Coffee", important: false, id: 1 },
-      { label: "Make Awesome App", important: true, id: 2 },
-      { label: "Have a lunch", important: false, id: 3 },
+      this.createTodoItem('1thing'),
+      this.createTodoItem('2thing'),
+      this.createTodoItem('3thing'),
     ],
   };
+
+  createTodoItem (label) {
+    return {
+      label: label,
+      important: false,
+      done: false,
+      id: this.maxId++,
+    };
+  }
 
   deleteItem = (id) => {
     this.setState(({ todoData }) => {
@@ -29,11 +38,7 @@ export default class App extends Component {
   };
 
   addItem = (text) => {
-    const newItem = {
-      label: text,
-      important: false,
-      id: this.maxId++,
-    };
+    const newItem = this.createTodoItem(text)
     this.setState(({ todoData }) => {
       const newArray = [...todoData, newItem];
 
@@ -67,8 +72,9 @@ export default class App extends Component {
   };
 
   render() {
-    const doneCount = this.state.todoData.filter((el) => el.done).length;
-    const todoCount = this.state.todoData.length - doneCount;
+    const {todoData} = this.state
+    const doneCount = todoData.filter((el) => el.done).length;
+    const todoCount = todoData.length - doneCount;
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
